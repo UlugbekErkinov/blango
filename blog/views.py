@@ -1,16 +1,23 @@
+from django.shortcuts import render
 from django.utils import timezone
 from blog.models import Post
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect
 from blog.forms import CommentForm
-
 # Create your views here.
+
+# return blog/index.html if request
 def index(request):
+    # return all posts
     posts = Post.objects.filter(published_at__lte=timezone.now())
     return render(request, "blog/index.html", {"posts": posts})
 
+# create post
 def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
-    if request.user.is_active:
+    
+    # fetching post
+    if request.user.is_active: #  check if user logged in or not
         if request.method == "POST":
             comment_form = CommentForm(request.POST)
 
@@ -24,6 +31,4 @@ def post_detail(request, slug):
             comment_form = CommentForm()
     else:
         comment_form = None
-    return render(
-        request, "blog/post-detail.html", {"post": post, "comment_form": comment_form}
-    )
+    return render(request, "blog/post-detail.html", {"post": post, "comment_form": comment_form})

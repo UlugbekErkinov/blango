@@ -2,13 +2,18 @@ from django.db import models
 from django.conf import settings
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.contrib.contenttypes.fields import GenericRelation
-# Create your models here.
 
+from django.contrib.contenttypes.fields import GenericRelation
+
+# Create your models here.
 class Tag(models.Model):
-  value = models.TextField(max_length=100)
-  def _str_(self):
+  # Tag contains tag text
+  value = models.TextField(max_length = 100)
+
+  def __str__(self):
     return self.value
+
+# Comment Model implemented with GenericForeignKey
 class Comment(models.Model):
     creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
@@ -17,17 +22,28 @@ class Comment(models.Model):
     content_object = GenericForeignKey("content_type", "object_id")
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-class Post(models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
-    created_at = models.DateTimeField(auto_now_add=True)
-    modified_at = models.DateTimeField(auto_now=True)
-    published_at = models.DateTimeField(blank=True, null=True)
-    title = models.TextField(max_length=100)
-    slug = models.SlugField()
-    summary = models.TextField(max_length=500)
-    content = models.TextField()
-    tags = models.ManyToManyField(Tag, related_name="posts")
-    comments = GenericRelation(Comment)
 
-    def __str__(self):
-        return self.title
+class Post(models.Model):
+  # The post by user
+  author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.PROTECT)
+  created_at = models.DateTimeField(auto_now_add = True)
+  modified_at = models.DateTimeField(auto_now = True)
+  published_at = models.DateTimeField(blank = True, null = True)
+  title = models.TextField(max_length = 100)
+  slug = models.SlugField()
+  summary = models.TextField(max_length = 500)
+  content = models.TextField()
+  tags = models.ManyToManyField(Tag, related_name = "posts")
+  comments = GenericRelation(Comment)
+
+  def __str__(self):
+    return self.title
+
+'''
+# Comment Model implemented with ForeignKey
+class Comment(models.Model):
+    creator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    content = models.TextField()
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
+'''

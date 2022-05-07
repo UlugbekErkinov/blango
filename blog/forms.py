@@ -3,6 +3,7 @@ from crispy_forms.layout import Submit
 from crispy_forms.helper import FormHelper
 from blog.models import Comment
 
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
@@ -11,4 +12,3 @@ class CommentForm(forms.ModelForm):
         super(CommentForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('submit', 'Submit'))
-    
