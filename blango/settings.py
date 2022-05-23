@@ -55,9 +55,11 @@ class Dev(Configuration):
       'crispy_forms',
       'crispy_bootstrap5',
       'blog',
+      'debug_toolbar',
   ]
 
   MIDDLEWARE = [
+      'debug_toolbar.middleware.DebugToolbarMiddleware',
       'django.middleware.security.SecurityMiddleware',
       'django.contrib.sessions.middleware.SessionMiddleware',
       'django.middleware.common.CommonMiddleware',
@@ -86,7 +88,7 @@ class Dev(Configuration):
   ]
 
   WSGI_APPLICATION = 'blango.wsgi.application'
-
+  
 
   # Database
   # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -185,4 +187,8 @@ class Dev(Configuration):
         "handlers": ["console"],
         "level": "DEBUG",
     },
+    
 }
+
+#### USED for Django Debug Toolbar
+  INTERNAL_IPS = ["192.168.10.93"] 

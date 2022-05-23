@@ -4,6 +4,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.contenttypes.fields import GenericRelation
+from django.utils import timezone
 
 # Create your models here.
 class Tag(models.Model):
@@ -26,9 +27,9 @@ class Comment(models.Model):
 class Post(models.Model):
   # The post by user
   author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.PROTECT)
-  created_at = models.DateTimeField(auto_now_add = True)
+  created_at = models.DateTimeField(auto_now_add = True, db_index = True)
   modified_at = models.DateTimeField(auto_now = True)
-  published_at = models.DateTimeField(blank = True, null = True)
+  published_at = models.DateTimeField(blank = True, null = True, db_index=True)
   title = models.TextField(max_length = 100)
   slug = models.SlugField()
   summary = models.TextField(max_length = 500)
@@ -47,3 +48,12 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 '''
+published_at = models.DateTimeField(blank=True, null=True, db_index=True)
+posts = Post.objects.filter(published_at__lte=timezone.now()).select_related("author")
+'''
+posts = (
+    Post.objects.filter(published_at__lte=timezone.now())
+    .select_related("author")
+    .only("title", "summary", "content", "author", "published_at", "slug")
+)
+''' 

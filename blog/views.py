@@ -7,6 +7,11 @@ from blog.forms import CommentForm
 # from django.views.decorators.cache import cache_page
 import logging
 
+def get_ip(request):
+  from django.http import HttpResponse
+  return HttpResponse(request.META['REMOTE_ADDR'])
+
+
 # from django.views.decorators.vary import vary_on_headers
  # Used for logging
 # Create your views here.
