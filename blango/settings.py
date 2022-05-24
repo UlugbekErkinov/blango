@@ -16,7 +16,7 @@ from configurations import values
 class Dev(Configuration):
   # Build paths inside the project like this: BASE_DIR / 'subdir'.
   BASE_DIR = Path(__file__).resolve().parent.parent
-
+  AUTH_USER_MODEL = "blango_auth.User"
 
   # Quick-start development settings - unsuitable for production
   # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -54,6 +54,7 @@ class Dev(Configuration):
       'django.contrib.staticfiles',
       'crispy_forms',
       'crispy_bootstrap5',
+      'blango_auth',
       'blog',
       'debug_toolbar',
   ]
@@ -191,4 +192,4 @@ class Dev(Configuration):
 }
 
 #### USED for Django Debug Toolbar
-  INTERNAL_IPS = ["192.168.10.93"] 
+  INTERNAL_IPS = ["192.168.10.226"] 

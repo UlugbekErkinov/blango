@@ -24,6 +24,15 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
 
+class AuthorProfile(models.Model):
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="profile"
+    )
+    bio = models.TextField()
+
+    def __str__(self):
+        return f"{self.__class__.__name__} object for {self.user}"
+        
 class Post(models.Model):
   # The post by user
   author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.PROTECT)
